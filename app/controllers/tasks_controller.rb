@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks=Task.all
+    @tasks=@list.tasks.all
     #@tasks = current_user.lists.tasks.all
   end
 
@@ -27,16 +27,16 @@ class TasksController < ApplicationController
   # POST /tasks.json
   def create
     #@task = Task.new(task_params)
-    @task = @list.tasks.create(task_params)
+    @task = @list.tasks.build(task_params)
     redirect_to @list
 
     respond_to do |format|
-      if @task.save
-        format.html { redirect_to @task, notice: 'Task was successfully created.' }
-        format.json { render :show, status: :created, location: @task }
+      if @task.save 
+        format.html { redirect_to list_task_path(@list, @task), notice: 'Task was successfully created.' } and return
+        #format.json { render :show, status: :created, location: @task }
       else
-        format.html { render :new }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+        format.html { render :new } and return
+        #format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -46,11 +46,11 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
-        format.json { render :show, status: :ok, location: @task }
+        format.html { redirect_to list_task_path(@list, @task), notice: 'Task was successfully updated.' }
+        #format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+        #format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -60,7 +60,7 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
     respond_to do |format|
-      format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
+      format.html { redirect_to @list, notice: 'Task was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -68,7 +68,7 @@ class TasksController < ApplicationController
   private
 
     def set_list
-      @list = List.find(params[:list_id])
+      @list = current_user.lists.find(params[:list_id])
     end
 
     # Use callbacks to share common setup or constraints between actions.
