@@ -1,17 +1,4 @@
-
-<p>
-  <strong>Name:</strong>
-  <%= @list.name %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @list.user %>
-</p>
-
-<%= link_to 'Edit', edit_list_path(@list) %> |
-<%= link_to 'Back', lists_path %>
-
+<p id="notice"><%= notice %></p>
 
 <h1>Tasks</h1>
 
@@ -26,7 +13,7 @@
   </thead>
 
   <tbody>
-    <% @list.tasks.each do |task| %>
+    <% @tasks.each do |task| %>
       <tr>
         <td><%= task.content %></td>
         <td><%= task.status %></td>
@@ -41,4 +28,6 @@
 
 <br>
 
-<%= link_to 'New Task', new_list_task_path(@list) %>
+<%= link_to 'New Task', new_list_task_path(list_id) %>
+
+
